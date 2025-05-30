@@ -1,16 +1,26 @@
 import modal
+from huggingface_hub import hf_hub_download, list_repo_files
 
 app = modal.App("mace-egret")
 
+def download_model():
+    files = list_repo_files(repo_id="lalt9/egret1")
+
+    for file in files:
+        if file.startswith("EGRET"):
+            hf_hub_download(repo_id="lalt9/egret1", filename=file, local_dir="models")
+
 image = modal.Image.debian_slim(python_version="3.12").apt_install("wget", "git").pip_install(
     "mace-torch==0.3.12", "ase", "torch", "huggingface_hub"
+).run_function(
+    download_model
 )
-    
+
 def load_model(model):
-    from huggingface_hub import hf_hub_download
     from mace.calculators import mace_off
 
-    raw_file_path = hf_hub_download(repo_id="lalt9/egret1", filename=model)
+    raw_file_path = f"models/{model}"
+
     calculator = mace_off(model=raw_file_path, default_dtype="float64")
 
     return calculator
