@@ -1,9 +1,9 @@
 import modal
-from huggingface_hub import hf_hub_download, list_repo_files
 
-app = modal.App("mace-egret")
+app = modal.App("Egret1")
 
 def download_model():
+    from huggingface_hub import hf_hub_download, list_repo_files
     files = list_repo_files(repo_id="lalt9/egret1")
 
     for file in files:
@@ -74,6 +74,6 @@ def extract_invariant_descriptor(model="EGRET_1.model", atoms_file_path=None):
 def main():
     print(predict_energies_and_forces.remote())
 
-    print(extract_equivariant_descriptor.remote())
+    print(extract_equivariant_descriptor.remote().shape)
 
-    print(extract_invariant_descriptor.remote())
+    print(extract_invariant_descriptor.remote().shape)
