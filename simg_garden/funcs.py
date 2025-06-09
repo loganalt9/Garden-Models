@@ -24,9 +24,7 @@ image = modal.Image.debian_slim().apt_install([
     "torch_geometric",
     "scipy",
     "pytorch-lightning"
-]).run_function(
-    download_models
-).run_commands(
+]).run_commands(
     "git clone https://github.com/gomesgroup/simg.git --depth 1 --single-branch /tmpsimg"
 ).run_function(
     stage_all_files
@@ -54,23 +52,8 @@ def predict(smi_path):
     sys.path.insert(0, "/")
     os.chdir("/")
 
-    files = os.listdir(os.getcwd())
-
-    print(f"Contents in directory: {os.getcwd()}")
-    for file in files:
-        print(file)
-
-    print()
-
     os.chdir("/simg")
-    files = os.listdir(os.getcwd())
     
-    print(f"Contents in directory: {os.getcwd()}")
-    for file in files:
-        print(file)
-
-    print()
-
     import simg.model_utils
     from simg.data import get_connectivity_info
     from simg.model_utils import pipeline
